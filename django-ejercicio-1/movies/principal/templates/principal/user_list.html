@@ -1,6 +1,16 @@
-<h1>Listing users</h1>
-<ul>
-{% for user in users %}
-    <li>{{user}}</li>
-{% endfor %}
-</ul>
+{% extends 'principal/base.html' %}
+
+{% block head %}
+    <h2>Lista de usuarios</h2>
+{% endblock head %}
+{% block content %}
+    <ul>
+    {% for user in users %}
+        <li>{{user}}</li>
+        <ul>
+            <li>Fecha de nacimiento: {{user.fecha_nacimiento}}</li>
+            <li>Categoría preferida: {{user.get_categoria_preferida_display}}</li>
+        </ul>
+    {% endfor %}
+    </ul>
+{% endblock content %}

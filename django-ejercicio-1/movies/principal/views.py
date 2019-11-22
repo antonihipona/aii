@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from principal.models import Usuario
 from principal.forms import UserForm
 
-# Create your views here.
+def index(request):
+    return render(request, "principal/base.html")
+
 def user_list(request):
     users = Usuario.objects.all()
     return render(request, "principal/user_list.html", {"users": users})
