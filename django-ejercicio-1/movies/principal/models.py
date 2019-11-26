@@ -17,7 +17,6 @@ categorias = [
     ("MU", "Musical"),
 ]
 
-@python_2_unicode_compatible
 class Usuario(models.Model):
     nombre = models.CharField(max_length=30)
     apellidos = models.CharField(max_length=30)
@@ -32,7 +31,7 @@ class Director(models.Model):
     apellidos = models.CharField(max_length=30)
     biografia = models.TextField()
 
-    def __unicode__():
+    def __str__(self):
         return self.nombre
 
 class Pelicula(models.Model):
@@ -42,5 +41,5 @@ class Pelicula(models.Model):
     director = models.ForeignKey(Director, on_delete=models.SET_NULL, null=True)
     categoria = models.CharField(max_length=2,choices=categorias) 
 
-    def __unicode__():
+    def __str__(self):
         return self.titulo
