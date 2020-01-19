@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+
+{% block top %}
+<h2>Lista de películas</h2>
+{% endblock top %}
+
+
+{% block content %}
+<ul>
+    {% for film in films %}
+    <li>{{ film.title }}</li>
+    <ul>
+        <li>{{ film.description }}</li>
+        <li>{{ film.rating }}</li>
+        <li>{{ film.trailer_url }}</li>
+        <li>{{ film.image_url }}</li>
+        <li>{{ film.release_date|date:"d/m/Y" }}</li>
+        <li>
+            {% for genre in film.genres.all %}
+            <span>| {{ genre.name }} </span>
+            {% endfor %}
+            <span> |</span>
+        </li>
+        <ul>
+            {% for actor in film.principal_actors.all %}
+            <li>{{ actor.name }} - {{ actor.image_url }}</li>
+            {% endfor %}
+        </ul>
+    </ul>
+    {% endfor %}
+</ul>
+{% endblock content %}
