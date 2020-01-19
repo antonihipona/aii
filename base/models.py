@@ -13,7 +13,7 @@ class Film(models.Model):
     rating = models.IntegerField(verbose_name='Puntuación')
     trailer_url = models.CharField(max_length=100, verbose_name='Trailer')
     image_url = models.CharField(max_length=100, verbose_name='Imagen')
-    release_date = models.DateField(verbose_name='Fecha de estreno')
+    release_date = models.DateField(verbose_name='Fecha de estreno', null=True, blank=True, default=None)
     genres = models.ManyToManyField(Genre, through='FilmGenre', related_name='genres')
     principal_actors = models.ManyToManyField(Actor, through='FilmActor', related_name='principal_actors')
 

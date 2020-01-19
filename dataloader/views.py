@@ -26,7 +26,7 @@ def load_data(request):
     FilmGenre.objects.all().delete()
     FilmActor.objects.all().delete()
 
-    page_number = 10
+    page_number = 100
     urls = []
     for page in range(1, page_number + 1):
         urls.append(settings.BASE_SCRAPING_URL + "/movie?page={}".format(page))
@@ -46,7 +46,10 @@ def load_data(request):
     p.terminate()
     p.join()
     for html in all_html:
-        get_films(html)
+        try:
+            get_films(html)
+        except:
+            continue
 
     Genre.objects.bulk_create(genres.values())
     Actor.objects.bulk_create(actors.values())
@@ -59,7 +62,6 @@ def get_films(html):
     global film_id
     global genre_id
     global actor_id
-    title = 'yahoo'
     bs = BeautifulSoup(html, "html.parser")
     section = bs.find('section', {'class': 'images'})
     description = section.find('div', {'class': 'overview'}).p.text
@@ -69,12 +71,18 @@ def get_films(html):
         trailer_url = 'https://www.youtube.com/watch?v=' + trailer_id['data-id']
     else:
         trailer_url = ''
-    image_url = section.find('div', {'class': 'image_content'}).a.img['src'].replace('_filter(blur)', '')
+    section_img = section.find('div', {'class': 'image_content'}).a.img
+    image_url = section_img['src'].replace('_filter(blur)', '')
+    title = section_img['alt']
 
     column = bs.find('div', {'class': 'grey_column'})
-    release = column.find('ul', {'class': 'releases'}).li.text.strip().split('\n')[0]
-    date = datetime.strptime(release, '%B %d, %Y')
-    release_date = date
+    release = column.find('ul', {'class': 'releases'})
+    if release:
+        release = release.li.text.strip().split('\n')[0]
+        date = datetime.strptime(release, '%B %d, %Y')
+        release_date = date
+    else:
+        release_date = None
 
     # Film
     film = Film(
