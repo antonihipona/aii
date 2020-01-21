@@ -21,23 +21,10 @@
 {% endblock custom_css %}
 
 {% block top %}
-<div class="container-fluid text-white">
-    <form action="/actors/" method="post">
-        {% csrf_token %}
-        <div class="form-group p-0 m-0">
-            <div class="row pt-3">
-                <div class="col-md-2 text-center">
-                    <label for="title"><h3>{{form.name.label_tag}}</h3></label>
-                </div>
-                <div class="col-md-7">
-                    {{ form.name }}
-                </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary btn-block">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </form>
+<div class="container-fluid text-white text-center">
+    <h1>
+        Películas de {{actor.name}}
+    </h1>
 </div>
 {% endblock top %}
 
@@ -45,14 +32,18 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row text-white">
-        {% for actor in actors %}
+        {% for film in films %}
         <div class="card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-2 bg-transparent">
-            <img class="card-img-top" src={{actor.image_url}} alt="Film image">
+            <img class="card-img-top" src={{film.image_url}} alt="Film image">
             <div class="card-body p-1 bg-dark">
-                <a href="/films/actor/{{actor.id}}" class="btn btn-primary p-0 w-100">Ver películas</a>
-                <div class="title-wrapper">
-                    <h5 class="card-title">{{ actor.name }}</h5>
+                <div class="progress p-0">
+                    <div class="progress-bar" style="width:{{film.rating}}%; color: black;">{{film.rating}}</div>
                 </div>
+                <a href="/film/{{film.id}}" class="btn btn-primary p-0 w-100">Ver más</a>
+                <div class="title-wrapper">
+                    <h5 class="card-title">{{ film.title }}</h5>
+                </div>
+                <p class="card-text">{{film.description|truncatewords:30}}</p>
             </div>
         </div>
         {% if forloop.counter|divisibleby:12 and not forloop.last %}

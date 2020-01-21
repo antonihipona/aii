@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.db.models import Count
 from django.http import QueryDict
-from .forms import FilmForm
-from .models import Film
+from .forms import FilmForm, ActorForm
+from .models import Film, Actor
 
 # Create your views here.
 def base(request):
@@ -31,3 +31,22 @@ def list_films(request):
 def get_film(request, film_id):
     film = Film.objects.get(pk=film_id)
     return render(request, 'base/film.html', {'film': film})
+
+def get_actor_films(request, actor_id):
+    films = Film.objects.filter(principal_actors__id=actor_id)
+    actor = Actor.objects.get(pk=actor_id)
+    return render(request, 'base/actor_film_list.html', {'actor': actor, 'films': films})
+
+def list_actors(request):
+    actors = []
+    if request.method == 'POST':
+        form = ActorForm(request.POST)
+        actors = Actor.objects.filter(name__contains=request.POST.get('name'))
+
+        if form.is_valid():
+            render(request, 'base/actor_list.html', {'form': form, 'actors': actors})
+    else:
+        actors = Actor.objects.all()
+        form = ActorForm()
+
+    return render(request, 'base/actor_list.html', {'form': form, 'actors': actors})

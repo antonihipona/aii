@@ -19,3 +19,11 @@ class FilmForm(forms.Form):
         queryset=Genre.objects.all(),
         to_field_name="name",
     )
+
+class ActorForm(forms.Form):
+    name = forms.CharField(
+        label="Nombre",
+        max_length=100,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+        required=False
+    )
