@@ -16,9 +16,10 @@ def list_films(request):
         genres = args.getlist('genres')
         if len(genres) > 0:
             # source https://stackoverflow.com/questions/32963210/django-filter-where-manytomany-field-contains-all-of-list
-            films = Film.objects.filter(genres__name__in=genres).annotate(num_genre=Count('genres')).filter(num_genre=len(genres))
+            films = Film.objects.filter(genres__name__in=genres).annotate(num_genre=Count('genres')).filter(num_genre=len(genres)).filter(title__contains=request.POST.get('title'))
         else:
-            films = Film.objects.all()
+            films = Film.objects.filter(title__contains=request.POST.get('title'))
+
         if form.is_valid():
             render(request, 'base/film_list.html', {'form': form, 'films': films})
     else:
