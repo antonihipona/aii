@@ -20,6 +20,7 @@ actors = {}
 films = []
 
 def load_data(request):
+    return render(request, "dataloader/data_loaded.html", {"films": films})
     Film.objects.all().delete()
     Genre.objects.all().delete()
     Actor.objects.all().delete()

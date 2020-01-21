@@ -21,10 +21,37 @@
 {% endblock custom_css %}
 
 {% block top %}
-<!-- <div class="row justify-content-center text-center text-white">
-    <h2>Lista de películas</h2>
-</div> -->
-
+<div class="container-fluid text-white">
+    <form action="/films/" method="post">
+        {% csrf_token %}
+        <div class="form-group p-0 m-0">
+            <div class="row pt-3">
+                <div class="col-md-2 text-center">
+                    <label for="title"><h3>{{form.title.label_tag}}</h3></label>
+                </div>
+                <div class="col-md-7">
+                    {{ form.title }}
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-check">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        {% for genre in form.genres %}
+                        <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+                            {{genre}}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock top %}
 
 
@@ -32,13 +59,13 @@
 <div class="container-fluid">
     <div class="row text-white">
         {% for film in films %}
-        <div class="card col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-2 bg-transparent">
+        <div class="card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-2 bg-transparent">
             <img class="card-img-top" src={{film.image_url}} alt="Film image">
             <div class="card-body p-1 bg-dark">
                 <div class="progress p-0">
                     <div class="progress-bar" style="width:{{film.rating}}%; color: black;">{{film.rating}}</div>
                 </div>
-                <a href="#" class="btn btn-primary p-0 w-100">Ver más</a>
+                <a href="/film/{{film.id}}" class="btn btn-primary p-0 w-100">Ver más</a>
                 <div class="title-wrapper">
                     <h5 class="card-title">{{ film.title }}</h5>
                 </div>
@@ -72,7 +99,7 @@
         return (rr << 16) + (rg << 8) + (rb | 0);
     };
 
-    const lerpColorWithPivot = function(colorA, colorB, colorC, amount){
+    const lerpColorWithPivot = function (colorA, colorB, colorC, amount) {
         if (amount > 0.5) {
             amount = (amount - 0.5) * 2;
             return lerpColor(colorB, colorC, amount);

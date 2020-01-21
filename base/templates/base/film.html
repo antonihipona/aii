@@ -1,0 +1,133 @@
+{% extends 'base/base.html' %}
+
+{% block custom_css %}
+<style>
+    .card {
+        background-color: rgb(31, 31, 31);
+    }
+
+    .title-wrapper {
+        line-height: 3.5em;
+        height: 3em;
+        text-align: center;
+    }
+
+    .card-title {
+        line-height: 1em;
+        display: inline-block;
+        vertical-align: middle;
+    }
+</style>
+{% endblock custom_css %}
+
+{% block top %}
+{% endblock top %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row text-white">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <img class="card-img-top" src={{film.image_url}} alt="Film image">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+            <h2>{{film.title}}</h2>
+            {{film.description}}
+            <h2>Fecha de estreno</h2>
+            {{film.release_date}}
+            <h2>Puntuación</h2>
+            <div class="progress">
+                <div class="progress-bar" style="width:{{film.rating}}%; color: black;">{{film.rating}}</div>
+            </div>
+            <h2>Géneros</h2>
+            {% for genre in film.genres.all %}
+            <span class="bg-dark rounded">{{genre}}</span>
+            {% endfor %}
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-xl-12">
+                    <h2>Trailer</h2>
+                    <embed src="{{film.trailer_url|slice:':24'}}embed/{{film.trailer_url|slice:'32:'}}"
+                        allowfullscreen="true" width="100%" height="auto">
+                </div>
+                {% for actor in film.principal_actors.all %}
+                <div class="col-md-4 col-lg-4 col-xl-4">
+                    <div class="card bg-transparent">
+                        <img class="card-img-top" src={{actor.image_url}} alt="Actor image">
+                        <div class="card-body p-1 bg-dark">
+                            <a href="/actor/films/{{actor.id}}" class="btn btn-primary p-0 w-100">Ver
+                                películas</a>
+                            <div class="title-wrapper">
+                                <h5 class="card-title">{{ actor.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- <div class="col-sm-12 col-md-6 col-lg-5">
+            <div class="row">
+                {% for actor in film.principal_actors.all %}
+                <div class="col-3">
+                    <div class="card bg-transparent">
+                        <img class="card-img-top" src={{actor.image_url}} alt="Actor image">
+                        <div class="card-body p-1 bg-dark">
+                            <a href="/actor/films/{{actor.id}}" class="btn btn-primary p-0 w-100">Ver películas</a>
+                            <div class="title-wrapper">
+                                <h5 class="card-title">{{ actor.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div> -->
+    </div>
+
+</div>
+
+{% endblock content %}
+{% block bottom %}
+<script>
+    const lerpColor = function (a, b, amount) {
+        const ar = a >> 16,
+            ag = a >> 8 & 0xff,
+            ab = a & 0xff,
+
+            br = b >> 16,
+            bg = b >> 8 & 0xff,
+            bb = b & 0xff,
+
+            rr = ar + amount * (br - ar),
+            rg = ag + amount * (bg - ag),
+            rb = ab + amount * (bb - ab);
+
+        return (rr << 16) + (rg << 8) + (rb | 0);
+    };
+
+    const lerpColorWithPivot = function (colorA, colorB, colorC, amount) {
+        if (amount > 0.5) {
+            amount = (amount - 0.5) * 2;
+            return lerpColor(colorB, colorC, amount);
+        } else {
+            amount = amount * 2;
+            return lerpColor(colorA, colorB, amount);
+        }
+    }
+    window.onload = function () {
+        var elements = document.getElementsByClassName("progress-bar");
+        for (var i = 0; i < elements.length; i++) {
+            var color = lerpColorWithPivot(0xab0000, 0xab5b00, 0x3fab00, elements[i].textContent / 100);
+            elements[i].style.backgroundColor = '#' + color.toString(16);
+        }
+    }
+</script>
+{% endblock bottom %}

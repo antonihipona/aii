@@ -7,6 +7,9 @@ class Actor(models.Model):
 class Genre(models.Model):
     name = models.CharField(max_length=50, verbose_name='Género')
 
+    def __str__(self):
+        return self.name
+
 class Film(models.Model):
     title = models.CharField(max_length=100, verbose_name='Título')
     description = models.CharField(max_length=1000, verbose_name='Descripción')
@@ -16,6 +19,9 @@ class Film(models.Model):
     release_date = models.DateField(verbose_name='Fecha de estreno', null=True, blank=True, default=None)
     genres = models.ManyToManyField(Genre, through='FilmGenre', related_name='genres')
     principal_actors = models.ManyToManyField(Actor, through='FilmActor', related_name='principal_actors')
+
+    def __str__(self):
+        return "{} | {}".format(self.title, self.genres.all())
 
 class FilmGenre(models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
