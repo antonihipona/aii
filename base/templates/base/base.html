@@ -32,25 +32,36 @@
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'load_data' %}active{% endif %}" href="/dataloader">Cargar datos</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'load_data' %}active{% endif %}"
+                            onclick="return askConfirmation();" href="/dataloader">Cargar datos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'list_films' %}active{% endif %}" href="/films">Películas</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'list_films' %}active{% endif %}"
+                            href="/films">Películas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'list_actors' %}active{% endif %}" href="/actors">Actores</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'list_actors' %}active{% endif %}"
+                            href="/actors">Actores</a>
                     </li>
                 </ul>
             </div>
         </nav>
         {% block top %}
-        <h2>¡Bienvenido a Buscametrajes!</h2>
+
+        <h2 class="text-white text-center">¡Bienvenido a Buscametrajes!</h2>
+        <h4 class="text-dark text-center">Una página dedicada a los amantes del cine.</h4>
         {% endblock top %}
         {% block content %}
         {% endblock content %}
         {% block bottom %}
         {% endblock bottom %}
     </div>
+    <script>
+        const askConfirmation = function () {
+            return confirm("Los datos tardan entre 5 y 10 minutos en cargar, ya que se recuperan 2000 películas. ¿Quieres lanzar el proceso de todas formas?");
+        }
+    </script>
 </body>
+
 
 </html>
