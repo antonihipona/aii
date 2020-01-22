@@ -1,0 +1,93 @@
+{% extends 'base/base.html' %}
+
+{% block custom_css %}
+<style>
+    .card {
+        background-color: rgb(31, 31, 31);
+    }
+
+    .title-wrapper {
+        line-height: 3.5em;
+        height: 3em;
+        text-align: center;
+    }
+
+    .card-title {
+        line-height: 1em;
+        display: inline-block;
+        vertical-align: middle;
+    }
+</style>
+{% endblock custom_css %}
+
+{% block top %}
+<div class="container-fluid text-white text-center">
+    <h1>
+        Películas similares a {{film.title}}
+    </h1>
+</div>
+{% endblock top %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row text-white">
+        {% for film in films %}
+        <div class="card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-2 bg-transparent">
+            <img class="card-img-top" src={{film.image_url}} alt="Film image">
+            <div class="card-body p-1 bg-dark">
+                <div class="progress p-0">
+                    <div class="progress-bar" style="width:{{film.rating}}%; color: black;">{{film.rating}}</div>
+                </div>
+                <a href="/film/{{film.id}}" class="btn btn-primary p-0 w-100">Ver más</a>
+                <div class="title-wrapper">
+                    <h5 class="card-title">{{ film.title }}</h5>
+                </div>
+                <p class="card-text">{{film.description|truncatewords:30}}</p>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:12 and not forloop.last %}
+    </div>
+    <div class="row text-white">
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
+{% block bottom %}
+<script>
+    const lerpColor = function (a, b, amount) {
+        const ar = a >> 16,
+            ag = a >> 8 & 0xff,
+            ab = a & 0xff,
+
+            br = b >> 16,
+            bg = b >> 8 & 0xff,
+            bb = b & 0xff,
+
+            rr = ar + amount * (br - ar),
+            rg = ag + amount * (bg - ag),
+            rb = ab + amount * (bb - ab);
+
+        return (rr << 16) + (rg << 8) + (rb | 0);
+    };
+
+    const lerpColorWithPivot = function (colorA, colorB, colorC, amount) {
+        if (amount > 0.5) {
+            amount = (amount - 0.5) * 2;
+            return lerpColor(colorB, colorC, amount);
+        } else {
+            amount = amount * 2;
+            return lerpColor(colorA, colorB, amount);
+        }
+    }
+    window.onload = function () {
+        var elements = document.getElementsByClassName("progress-bar");
+        for (var i = 0; i < elements.length; i++) {
+            var color = lerpColorWithPivot(0xab0000, 0xab5b00, 0x3fab00, elements[i].textContent / 100);
+            elements[i].style.backgroundColor = '#' + color.toString(16);
+        }
+    }
+</script>
+{% endblock bottom %}

@@ -7,4 +7,5 @@ urlpatterns = [
     path("film/<film_id>", views.get_film, name='get_film'),
     path("films/actor/<actor_id>", views.get_actor_films, name='get_actor_films'),
     path("actors/", views.list_actors, name='list_actors'),
+    path("recommend/film/<film_id>", views.recommend_films, name='recommend_films'),
 ]
